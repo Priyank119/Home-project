@@ -1,18 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class Weapons : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public Transform leftHand;
+    public GameObject arrow;
+    public Transform arrowSocketPoint;
 
-    // Update is called once per frame
-    void Update()
+    public void reloadArrow()
     {
-        
+        if (Vector3.Distance(Camera.main.transform.position, leftHand.position) < 1 && leftHand.position.x < 0)
+        {
+            GameObject.Instantiate(arrow, leftHand.position,Quaternion.identity);
+        }
+    }
+    public void fireArrow()
+    {
+        arrowSocketPoint.GetChild(0).transform.Translate(Vector3.forward);
     }
 }
