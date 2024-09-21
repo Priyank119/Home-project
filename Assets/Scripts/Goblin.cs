@@ -1,19 +1,67 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Goblin : MonoBehaviour
 {
-    private ScoreUI _scoreUI;
+    public ScoreUI _scoreUI;
     public float getScore;
     public AudioClip _hit;
+    public GameObject arrowSpawner;
+    private bool isDesolve;
 
-    private void OnCollisionEnter(Collision collision)
+    private float timeElapsed = 0;
+    public float desolveDuration = 1;
+
+    public List<Transform> waypoints;
+    NavMeshAgent agent;
+    public int currentWayPointIndex = 0;
+
+    private void Start()
     {
-        if (collision.gameObject.name == "arrow")
+        agent = GetComponent<NavMeshAgent>();
+    }
+
+    private void hiding()
+    {
+        float distenceToWayPoint = Vector3.Distance(waypoints[currentWayPointIndex].position, transform.position);
+        if (distenceToWayPoint <= 3)
         {
-            _scoreUI.getTotalScore();
-            this.GetComponent<AudioSource>().PlayOneShot(_hit);
-            float desolve = Mathf.Lerp(-1f, 1f, 0.5f);
-            this.GetComponent<MeshRenderer>().material.SetFloat("_Desolve", desolve);
+            currentWayPointIndex = (currentWayPointIndex + 1) % waypoints.Count;
         }
+        agent.SetDestination(waypoints[currentWayPointIndex].position);
+    }
+
+    private void deathEffect()
+    {
+        if (timeElapsed < desolveDuration && isDesolve == true)
+        {
+            float t = timeElapsed / desolveDuration;
+            float desolve = Mathf.Lerp(-1f, 1f, t);
+            timeElapsed += Time.deltaTime;
+
+            this.transform.GetComponentInChildren<SkinnedMeshRenderer>().material.SetFloat("_Desolve", desolve);
+            if (timeElapsed > desolveDuration)
+            {
+                Destroy(this.gameObject);
+            }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.name == "arrow")
+        {
+            this.GetComponent<AudioSource>().PlayOneShot(_hit);
+            getScore += 15;
+            _scoreUI.getTotalScore();
+            isDesolve = true;
+            Destroy(arrowSpawner.transform.GetChild(0).gameObject, 1);
+        }
+    }
+    private void Update()
+    {
+        hiding();
+        deathEffect();
     }
 }
