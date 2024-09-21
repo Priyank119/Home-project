@@ -5,16 +5,12 @@ using UnityEngine;
 
 public class Weapons : MonoBehaviour
 {
-    public Transform leftHand;
     public GameObject arrow;
     public Transform arrowSocketPoint;
 
     public void reloadArrow()
     {
-        if (Vector3.Distance(Camera.main.transform.position, leftHand.position) < 1 && leftHand.position.x < 0)
-        {
-            GameObject.Instantiate(arrow, leftHand.position,Quaternion.identity);
-        }
+            GameObject.Instantiate(arrow, arrowSocketPoint.position,Quaternion.identity);
     }
     public void fireArrow()
     {

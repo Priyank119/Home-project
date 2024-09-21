@@ -20,7 +20,7 @@ public class ScoreUI : MonoBehaviour
     // Update is called once per frame
     public void getTotalScore()
     {
-        totalScore = _DeathBall.getScore + _goblin.getScore + _mremireh.getScore;
+        totalScore = _DeathBall._getScore + _goblin.getScore + _mremireh.getScore;
         healthBar.fillAmount = totalScore / 10;
         healthParsentage.text = string.Concat(totalScore.ToString(), "%");
     }
