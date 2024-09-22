@@ -37,7 +37,7 @@ public class Mremireh : MonoBehaviour
         if (other.gameObject.name == "arrow")
         {
             this.GetComponent<AudioSource>().PlayOneShot(_hit);
-            this.GetComponent<Animator>().SetTrigger("death");
+            this.GetComponent<Animator>().SetTrigger("Death");
             getScore += 30;
             _scoreUI.getTotalScore();
             isDesolve = true;
@@ -63,6 +63,7 @@ public class Mremireh : MonoBehaviour
 
     private void Update()
     {
+        this.GetComponent<Animator>().SetFloat("Speed", agent.velocity.magnitude / 2);
         hiding();
         deathEffect();
     }

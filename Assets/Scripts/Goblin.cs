@@ -61,6 +61,7 @@ public class Goblin : MonoBehaviour
     }
     private void Update()
     {
+        this.GetComponent<Animator>().SetFloat("Speed", agent.velocity.magnitude / 2);
         hiding();
         deathEffect();
     }
